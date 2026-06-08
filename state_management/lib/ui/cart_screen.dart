@@ -35,8 +35,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
         // ],
         children: items.map((item) {
           return ListTile(
-              title: Text(item.name),
-              subtitle: Text('${item.price}')
+            title: Text(item.name),
+            subtitle: Text('${item.price}'),
+            trailing: IconButton(
+              onPressed: () {
+                ref.read(cartProvider.notifier).removeItem(item.id);
+              },
+              icon: const Icon(Icons.delete),
+            ),
           );
         }).toList(),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:state_management/ui/cart_screen.dart';
 import 'package:state_management/ui/home_screen.dart';
 import 'package:state_management/ui/login_screen.dart';
+import 'package:state_management/ui/user_list_screen.dart';
 
 // Để cho các widgets có thể đọc được vào các providers, ta cần wrap cả app lại
 // bằng 1 cái scope 'ProviderScope'
@@ -26,7 +27,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/home': (context) => HomeScreen(),
         '/login': (context) => LoginScreen(),
-        '/cart': (context) => CartScreen()
+        '/cart': (context) => CartScreen(),
+        '/user-list': (context) => UserListScreen(),
       },
     );
   }

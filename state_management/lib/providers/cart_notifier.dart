@@ -25,7 +25,8 @@ part 'cart_notifier.g.dart';
 // });
 
 /*********************** GENERATOR *******************/
-@Riverpod(keepAlive: true)
+// @Riverpod(keepAlive: true)
+@riverpod
 class CartNotifier extends _$CartNotifier {
   // fn build() -> init value (state)
   // Generator sẽ dựa trên Data type trả về của fn build()
@@ -45,12 +46,24 @@ class CartNotifier extends _$CartNotifier {
     print('Adding product ${product.id}');
     print('Before state contains ${state.length} items');
     // Ko dùng cách state.add()
-    state.add(product);
-    // state = [... state, product]; -> state được flutter quản lý theo ref trong mem
+    // state.add(product);
+    state = [
+      ...state,
+      product,
+    ]; //-> state được flutter quản lý theo ref trong mem
     // gán lại object state = obj cũ + data mới -> ref mới -> có tín hiệu state mới -> re render
     print('After state contains ${state.length} items');
   }
 
+  // removeItem theo ID
+  void removeItem(int productId) {
+    state = state.where((item) => item.id != productId).toList();
+  }
+
+  // clear cart
+  void clearCart() {
+    state = [];
+  }
 }
 
 // Lưu ý:
@@ -58,3 +71,10 @@ class CartNotifier extends _$CartNotifier {
 // Tên lớp         -> bỏ suffix `Notifier` -> thêm suffix `Provider`
 // CartNotifier    ->       Cart           ->          CartProvider
 // 2. Lớp _$CartNotifier -> viết tắt của Notifier<>
+
+// Dependent provider
+// Provider -> count so item trong cart
+@riverpod
+int totalItems(ref) {
+  return ref.watch(cartProvider).length;
+}

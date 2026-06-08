@@ -53,10 +53,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Di chuyen qua man hinh Cart Screen
             Navigator.pushNamed(context, '/cart');
           }, icon: Badge(
-            label: Text('0'),
+            label: Text(ref.watch(totalItemsProvider).toString()),
             child: Icon(Icons.shopping_cart),
           ))
         ],
+      ),
+      drawer: Drawer(
+        child:ListView(
+          children: [
+            DrawerHeader(child: Text('Menu'),
+      ),
+            ListTile(
+              title: Text('User List Screen'),
+              onTap: ()=>Navigator.pushNamed(context, '/user-list'),
+            )
+          ],
+        )
       ),
       body: GridView.count(
         crossAxisCount: 4,
