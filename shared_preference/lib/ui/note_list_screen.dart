@@ -22,7 +22,15 @@ class _NoteListScreenState extends ConsumerState<NoteListScreen> {
         children: notes
             .map(
               (note) => Card(
-                child: Column(children: [Text(note.title), Text(note.content)]),
+                child: Column(
+                  children: [
+                    Text(note.title),
+                    Text(note.content),
+                    IconButton(onPressed: () {
+                      ref.read(noteProvider.notifier).deleteNote(note.id);
+                    }, icon: Icon(Icons.delete)),
+                  ],
+                ),
               ),
             )
             .toList(),

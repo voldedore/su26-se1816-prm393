@@ -9,14 +9,42 @@ class ListProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home')),
+      appBar: AppBar(title: Text('Home'), backgroundColor: Colors.blueAccent,),
       drawer: SideMenu(),
-      body: GridView.count(
-        crossAxisCount: col,
-        children: List.generate(20, (i) {
-          return Card(child: Text('Product $i'));
-        }),
-      ),
+      body:
+          Column(
+            children: [
+              // Image.asset("images/prm.jpg",
+              //   width: double.infinity,
+              //   height: 130,
+              //   fit: BoxFit.cover,
+              // ),
+              Image(
+                image: AssetImage('images/prm.jpg'),
+                width: 400,
+                height: 130,
+                fit: .contain,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: GridView.count(
+                    crossAxisCount: col,
+                    crossAxisSpacing: 3,
+                    mainAxisSpacing: 3,
+                    children: List.generate(20, (i) {
+                      return Card(child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(child: Text('Product $i')),
+                      ));
+                    }),
+
+                  ),
+                ),
+              ),
+            ],
+          ),
+
     );
   }
 }

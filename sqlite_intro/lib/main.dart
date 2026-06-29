@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqlite_intro/providers/note_notifier.dart';
 import 'package:sqlite_intro/ui/add_note_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  // Ensure co bind (vi phai doc va ghi vao disk cua device)
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,16 +23,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final notes = ref.watch(noteProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text("Note management"),

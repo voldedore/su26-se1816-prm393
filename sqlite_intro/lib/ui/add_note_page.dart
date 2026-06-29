@@ -10,7 +10,7 @@ class AddNotePage extends StatefulWidget {
 class _AddNotePageState extends State<AddNotePage> {
   final _noteTitleController = TextEditingController();
   final _noteContentController = TextEditingController();
-  final _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -52,6 +52,11 @@ class _AddNotePageState extends State<AddNotePage> {
                 },
               ),
               ElevatedButton(onPressed: () {
+                // Valid
+                if (_formKey.currentState!.validate()) {
+                  // Goi logic de tao note moi
+                  // Goi NoteNotifer
+                }
 
 
               }, child: Text("Add"))

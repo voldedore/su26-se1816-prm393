@@ -38,7 +38,10 @@ class NoteNotifier extends _$NoteNotifier {
     // Cap nhat lai state (phuc vu cho re-render UI)
     // state: List<Note> xem lai build() phia tren
     state = [...state, newNote];
+    await _saveNotes();
+  }
 
+  Future<void> _saveNotes() async {
     // Save vao shared pref
     final prefs = ref.read(sharedPreferencesProvider);
     final noteStringList = state.map((note) => json.encode(note.toJson())).toList();
@@ -46,7 +49,11 @@ class NoteNotifier extends _$NoteNotifier {
   }
 
   // delete
-
+  // Note id = 3
+  Future<void> deleteNote(int id) async {
+    state = state.where((note) => note.id != id).toList();
+    await _saveNotes();
+  }
 
   // update
 }
