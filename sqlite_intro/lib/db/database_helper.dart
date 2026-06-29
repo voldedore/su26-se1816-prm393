@@ -2,6 +2,14 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqlite_intro/model/note.dart';
 
+/*
+Để debug được sqlite của app mobile
+- Android studio, chọn App inspection > Chọn process đúng tên với app của mình
+  Chờ load db, nếu không có thể reload lại
+  Để gọi các câu query chọn Open New Query Tab
+Trên browser, cài đặt thêm deps   sqflite_common_ffi_web:
+  Chạy lệnh dart run sqflite_common_ffi_web:setup
+ */
 class DatabaseHelper {
   static const _databaseFileName = 'prm393_notemanagement.db';
   static const _databaseVersion = 1;
@@ -13,7 +21,7 @@ class DatabaseHelper {
 
   static Database? _database;
 
-  // getter cho thuoc tinh `database`
+  // getter cho thuoc tinh `_database`
   Future<Database> get database async {
     _database ??= await _initDatabase();
     // a ??= b
@@ -60,5 +68,14 @@ class DatabaseHelper {
     * ]
     * */
     return [for (final map in maps) Note.fromJson(map)];
+  }
+
+  Future<int> insert(Note note) async {
+    final db = await database;
+    return db.insert(
+        _tableName,
+        note.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace // Nếu có id bị đụng độ, thì replace ghi đè lên
+    );
   }
 }

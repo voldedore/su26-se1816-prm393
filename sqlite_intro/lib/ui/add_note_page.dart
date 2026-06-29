@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqlite_intro/providers/note_notifier.dart';
 
-class AddNotePage extends StatefulWidget {
+import '../model/note.dart';
+
+class AddNotePage extends ConsumerStatefulWidget {
   const AddNotePage({super.key});
 
   @override
-  State<AddNotePage> createState() => _AddNotePageState();
+  ConsumerState<AddNotePage> createState() => _AddNotePageState();
 }
 
-class _AddNotePageState extends State<AddNotePage> {
+class _AddNotePageState extends ConsumerState<AddNotePage> {
   final _noteTitleController = TextEditingController();
   final _noteContentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -55,10 +59,12 @@ class _AddNotePageState extends State<AddNotePage> {
                 // Valid
                 if (_formKey.currentState!.validate()) {
                   // Goi logic de tao note moi
-                  // Goi NoteNotifer
+                  // Goi NoteNotifier
+                  ref.read(noteProvider.notifier).addNote(
+                      Note(title: _noteTitleController.text, content: _noteContentController.text)
+                  );
+                  Navigator.pop(context);
                 }
-
-
               }, child: Text("Add"))
             ],
           )

@@ -11,4 +11,13 @@ class NoteNotifier extends _$NoteNotifier {
   Future<List<Note>> build() async {
     return DatabaseHelper.instance.getList();
   }
+
+  // P/thức cho CRUD
+  // CREARE
+  Future<void> addNote(Note note) async {
+    // goi DatabaseHelper để thực hiện insert
+    await DatabaseHelper.instance.insert(note);
+    ref.invalidateSelf(); // Báo hiệu build() cần chạy lại
+    await future;         // Chờ state mới load xong
+  }
 }

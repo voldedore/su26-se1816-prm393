@@ -59,6 +59,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             width: .infinity,
             fit: .cover,
           ),
+          // Bai tap: Show danh sách Note trong DB (noteProvider)
+          // 1) Dùng ListView để show mỗi ListTile là 1 note
+          //    Phía sau (trailing), cho 1 Icon delete
+          // Sự kiện onPress của icon này, sẽ xóa note ra khỏi db
+          // 2) Viết hàm delete trong notedao (lớp DatabaseHelper)
+          // 3) Viết hàm delete trong notifier (UI chỉ giao tiếp qua notifier)
+          //
         ],
       ),
       floatingActionButton: FloatingActionButton(
