@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqlite_intro/providers/note_notifier.dart';
 import 'package:sqlite_intro/ui/add_note_page.dart';
+import 'package:sqlite_intro/ui/note_details.dart';
 
 void main() {
   // Ensure co bind (vi phai doc va ghi vao disk cua device)
@@ -33,7 +34,9 @@ class MyHomePage extends ConsumerStatefulWidget {
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    final notes = ref.watch(noteProvider);
+    final notesAsyncValue = ref.watch(
+      noteProvider,
+    ); // kieu du lieu return cua provider build()
     return Scaffold(
       appBar: AppBar(
         title: Text("Note management"),
@@ -59,6 +62,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             width: .infinity,
             fit: .cover,
           ),
+
           // Bai tap: Show danh sách Note trong DB (noteProvider)
           // 1) Dùng ListView để show mỗi ListTile là 1 note
           //    Phía sau (trailing), cho 1 Icon delete
@@ -66,6 +70,35 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           // 2) Viết hàm delete trong notedao (lớp DatabaseHelper)
           // 3) Viết hàm delete trong notifier (UI chỉ giao tiếp qua notifier)
           //
+          Expanded(
+            child: notesAsyncValue.when(
+              data: (notes) => notes.isEmpty
+                  ? Text('No notes yet. Please create one.')
+                  : ListView.builder(
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        final note = notes[index];
+                        return ListTile(
+                          title: Text(note.title),
+                          subtitle: Text(note.content),
+                          onTap: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => NoteDetails(note: note))
+                            );
+                          },
+                          trailing: IconButton(
+                            onPressed: () {
+                              ref.read(noteProvider.notifier).deleteNoteById(note.id!);
+                            },
+                            icon: const Icon(Icons.delete),
+                          ),
+                        );
+                      },
+                    ),
+              error: (err, stack) => Text('There is an error loading notes.'),
+              loading: () => const Center(child: CircularProgressIndicator()),
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

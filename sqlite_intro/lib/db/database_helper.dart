@@ -78,4 +78,14 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace // Nếu có id bị đụng độ, thì replace ghi đè lên
     );
   }
+
+  Future<int> delete(int id) async {
+    final db = await database;
+    return db.delete(_tableName, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> update(Note note) async {
+    final db = await database;
+    return db.update(_tableName, note.toJson(), where: 'id = ?', whereArgs: [note.id]);
+  }
 }
