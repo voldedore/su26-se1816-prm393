@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:sqlite_intro/model/note.dart';
 
 /*
@@ -36,11 +38,26 @@ class DatabaseHelper {
   // 1c) tao du cac table (create tables)
   // 2) ... crud
 
+  // Future<Database> _initDatabase() async {
+  //   final dbPath = await getDatabasesPath();
+  //   final path = join(dbPath, _databaseFileName);
+  //   print('>>> DB Path: ${path}');
+  //   return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+  // }
+
+  // Nếu dùng Web để test: chạy thêm lệnh sau trước khi run dự án
+  // dart run sqflite_common_ffi_web:setup
   Future<Database> _initDatabase() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, _databaseFileName);
-    print('>>> DB Path: ${path}');
-    return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb; // chuyển factory khi chạy web
+      return openDatabase(_databaseFileName, version: _databaseVersion, onCreate: _onCreate);
+    } else {
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, _databaseFileName);
+      // Debug: in ra để xác nhận file được tạo ở đâu
+      print('>>> DB path: $path');
+      return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    }
   }
 
   Future<void> _onCreate(Database db, int version) async {
